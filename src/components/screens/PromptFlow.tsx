@@ -3,7 +3,7 @@ import confetti from 'canvas-confetti';
 import { isPrime, validateAndComputeRSA, modPow } from '../../utils/rsa';
 import { validateMessageForRSA } from '../../utils/encoding';
 import { RSAKeys, EncodedChar } from '../../types/rsa';
-import { ArrowRight, RotateCcw, Check, Sparkles, ChevronDown, Lock, Unlock } from 'lucide-react';
+import { ArrowRight, RotateCcw, Check, Sparkles, ChevronDown, Lock, Unlock, ArrowLeft } from 'lucide-react';
 
 interface Props {
   onBackToHome: () => void;
@@ -75,11 +75,11 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
   useEffect(() => {
     if (stage === 'keygen_anim') {
       const timers = [
-        setTimeout(() => setKeyGenProgress(1), 300),
-        setTimeout(() => setKeyGenProgress(2), 700),
-        setTimeout(() => setKeyGenProgress(3), 1100),
-        setTimeout(() => setKeyGenProgress(4), 1500),
-        setTimeout(() => setStage('keys_ready'), 1900),
+        setTimeout(() => setKeyGenProgress(1), 350),
+        setTimeout(() => setKeyGenProgress(2), 800),
+        setTimeout(() => setKeyGenProgress(3), 1250),
+        setTimeout(() => setKeyGenProgress(4), 1700),
+        setTimeout(() => setStage('keys_ready'), 2150),
       ];
       return () => timers.forEach(clearTimeout);
     }
@@ -110,12 +110,12 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
       if (animCharIndex < encodedChars.length) {
         const timer = setTimeout(() => {
           setAnimCharIndex(prev => prev + 1);
-        }, 500);
+        }, 550);
         return () => clearTimeout(timer);
       } else {
         const finishTimer = setTimeout(() => {
           setStage('ciphertext_view');
-        }, 400);
+        }, 500);
         return () => clearTimeout(finishTimer);
       }
     }
@@ -136,16 +136,16 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
           const origChar = encodedChars[animCharIndex]?.char ?? '?';
           setDecryptedChars(prev => [...prev, origChar]);
           setAnimCharIndex(prev => prev + 1);
-        }, 500);
+        }, 550);
         return () => clearTimeout(timer);
       } else {
         const finishTimer = setTimeout(() => {
           setStage('recovered');
           try {
             confetti({
-              particleCount: 60,
-              spread: 60,
-              origin: { y: 0.7 },
+              particleCount: 80,
+              spread: 70,
+              origin: { y: 0.65 },
               colors: ['#a78bfa', '#34d399', '#fbbf24', '#f472b6'],
             });
           } catch {
@@ -181,56 +181,53 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
   const msgSuggestions = ['HELLO', 'SECRET', 'MATH', 'PEACE', 'EXPLORE'];
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-800 flex flex-col items-center justify-start p-4 sm:p-6 select-none font-sans">
-      {/* Background Soft Pastel Ambient Blurs */}
-      <div className="fixed -top-12 -left-12 w-64 h-64 bg-violet-100 rounded-full blur-3xl opacity-50 pointer-events-none" />
-      <div className="fixed bottom-0 -right-12 w-72 h-72 bg-emerald-100 rounded-full blur-3xl opacity-40 pointer-events-none" />
-
-      {/* Minimal Top Header - No navigation clutter */}
-      <header className="w-full max-w-xl flex items-center justify-between py-4 border-b border-stone-200/60 mb-6 z-10">
-        <div className="flex items-center gap-2">
+    <div className="relative min-h-screen flex flex-col items-center justify-start p-4 sm:p-8 select-none font-sans z-10">
+      {/* Top Header Bar */}
+      <header className="w-full max-w-3xl flex items-center justify-between py-4 border-b border-stone-200/80 dark:border-stone-800/80 mb-8 sm:mb-10 transition-colors duration-300">
+        <div className="flex items-center gap-3">
           <button
             onClick={onBackToHome}
-            className="text-xs font-mono px-2.5 py-1 rounded-full bg-stone-200/70 hover:bg-stone-300 text-stone-700 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 text-xs sm:text-sm font-mono px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-stone-800/80 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-700 shadow-xs transition-all cursor-pointer"
             title="Return to Hero"
           >
-            ← Home
+            <ArrowLeft className="w-4 h-4" />
+            <span>Home</span>
           </button>
-          <span className="font-bold text-sm tracking-tight text-stone-800">
+          <span className="font-bold text-base sm:text-lg tracking-tight text-stone-900 dark:text-stone-100">
             RSA <span className="text-violet-500 font-serif italic">Alive</span>
           </span>
         </div>
 
         <button
           onClick={handleRestartNewPrimes}
-          className="flex items-center gap-1 text-xs text-stone-400 hover:text-stone-700 transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 text-xs sm:text-sm text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-stone-100 transition-colors cursor-pointer"
         >
-          <RotateCcw className="w-3.5 h-3.5" />
-          <span>Reset</span>
+          <RotateCcw className="w-4 h-4" />
+          <span>Reset Session</span>
         </button>
       </header>
 
       {/* Main Conversational Stream */}
-      <main className="w-full max-w-xl space-y-6 pb-20 z-10">
+      <main className="w-full max-w-3xl space-y-8 sm:space-y-10 pb-28">
         {/* STEP 1: PROMPT FOR P */}
-        <div className="space-y-3 animate-fade-up">
-          <div className="flex items-start gap-2.5">
-            <div className="w-7 h-7 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center text-xs font-mono font-bold flex-shrink-0 mt-0.5">
+        <div className="space-y-4 animate-fade-up">
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-2xl bg-violet-100 dark:bg-violet-950/70 text-violet-700 dark:text-violet-300 flex items-center justify-center text-sm font-mono font-bold flex-shrink-0 mt-0.5 border border-violet-200/60 dark:border-violet-800/60 shadow-xs">
               1
             </div>
             <div className="space-y-1">
-              <p className="text-sm sm:text-base font-medium text-stone-800">
-                Let's begin! Choose your first secret prime number <span className="font-mono text-violet-600 font-bold">p</span>.
-              </p>
-              <p className="text-xs text-stone-400">
+              <h2 className="text-xl sm:text-2xl font-semibold text-stone-900 dark:text-stone-100">
+                Let's begin! Choose your first secret prime number <span className="font-mono text-violet-600 dark:text-violet-400 font-bold">p</span>.
+              </h2>
+              <p className="text-sm sm:text-base text-stone-500 dark:text-stone-400">
                 Primes can only be divided by 1 and themselves.
               </p>
             </div>
           </div>
 
           {/* Quick suggestions */}
-          <div className="pl-9 flex flex-wrap items-center gap-1.5">
-            <span className="text-xs text-stone-400 mr-1">Quick pick:</span>
+          <div className="pl-13 flex flex-wrap items-center gap-2">
+            <span className="text-xs sm:text-sm text-stone-400 dark:text-stone-500 mr-1 font-mono">Quick pick:</span>
             {pSuggestions.map(num => (
               <button
                 key={num}
@@ -239,10 +236,10 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
                   handleConfirmP(num);
                 }}
                 disabled={stage !== 'ask_p'}
-                className={`px-3 py-1 rounded-full text-xs font-mono transition-all cursor-pointer ${
+                className={`px-4 py-2 rounded-2xl text-xs sm:text-sm font-mono transition-all cursor-pointer ${
                   pVal === num && stage !== 'ask_p'
-                    ? 'bg-violet-500 text-white font-bold shadow-xs'
-                    : 'bg-stone-100 hover:bg-violet-100 text-stone-700 border border-stone-200/80 disabled:opacity-60'
+                    ? 'bg-violet-600 dark:bg-violet-500 text-white font-bold shadow-sm'
+                    : 'bg-white/80 dark:bg-stone-900/80 hover:bg-violet-50 dark:hover:bg-violet-950 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-800 disabled:opacity-60 shadow-xs'
                 }`}
               >
                 p = {num}
@@ -252,18 +249,18 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
 
           {/* Custom Input */}
           {stage === 'ask_p' && (
-            <div className="pl-9 pt-1 flex items-center gap-2">
+            <div className="pl-13 pt-1 flex items-center gap-3">
               <input
                 type="number"
                 value={pInput}
                 onChange={e => setPInput(e.target.value)}
                 placeholder="Enter prime (e.g. 61)"
-                className="w-36 px-3 py-1.5 text-xs font-mono rounded-xl bg-white border border-stone-200 text-stone-800 focus:outline-none focus:ring-2 focus:ring-violet-300"
+                className="w-44 px-4 py-2.5 text-sm sm:text-base font-mono rounded-2xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-400 shadow-xs"
               />
               <button
                 onClick={() => handleConfirmP()}
                 disabled={!isPrime(parseInt(pInput, 10))}
-                className="px-4 py-1.5 rounded-xl bg-stone-900 text-white text-xs font-medium hover:bg-stone-800 disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
+                className="px-6 py-2.5 rounded-2xl bg-stone-900 hover:bg-stone-800 dark:bg-violet-500 dark:hover:bg-violet-400 text-white text-sm font-medium disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer shadow-xs"
               >
                 Confirm p
               </button>
@@ -272,9 +269,9 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
 
           {/* Confirmed pill */}
           {stage !== 'ask_p' && (
-            <div className="pl-9">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-violet-50 border border-violet-200 text-violet-800 text-xs font-mono">
-                <Check className="w-3.5 h-3.5 text-violet-500" />
+            <div className="pl-13">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-violet-50 dark:bg-violet-950/60 border border-violet-200 dark:border-violet-800/80 text-violet-800 dark:text-violet-200 text-xs sm:text-sm font-mono">
+                <Check className="w-4 h-4 text-violet-500" />
                 <span>p = {pVal} selected</span>
               </span>
             </div>
@@ -283,24 +280,24 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
 
         {/* STEP 2: PROMPT FOR Q */}
         {stage !== 'ask_p' && (
-          <div className="space-y-3 animate-fade-up">
-            <div className="flex items-start gap-2.5">
-              <div className="w-7 h-7 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center text-xs font-mono font-bold flex-shrink-0 mt-0.5">
+          <div className="space-y-4 animate-fade-up">
+            <div className="flex items-start gap-3.5">
+              <div className="w-10 h-10 rounded-2xl bg-violet-100 dark:bg-violet-950/70 text-violet-700 dark:text-violet-300 flex items-center justify-center text-sm font-mono font-bold flex-shrink-0 mt-0.5 border border-violet-200/60 dark:border-violet-800/60 shadow-xs">
                 2
               </div>
               <div className="space-y-1">
-                <p className="text-sm sm:text-base font-medium text-stone-800">
-                  Now choose a second prime number <span className="font-mono text-violet-600 font-bold">q</span> (different from p).
-                </p>
-                <p className="text-xs text-stone-400">
+                <h2 className="text-xl sm:text-2xl font-semibold text-stone-900 dark:text-stone-100">
+                  Now choose a second prime number <span className="font-mono text-violet-600 dark:text-violet-400 font-bold">q</span> (different from p).
+                </h2>
+                <p className="text-sm sm:text-base text-stone-500 dark:text-stone-400">
                   Multiplying p and q together forms your public modulus n.
                 </p>
               </div>
             </div>
 
             {/* Quick suggestions */}
-            <div className="pl-9 flex flex-wrap items-center gap-1.5">
-              <span className="text-xs text-stone-400 mr-1">Quick pick:</span>
+            <div className="pl-13 flex flex-wrap items-center gap-2">
+              <span className="text-xs sm:text-sm text-stone-400 dark:text-stone-500 mr-1 font-mono">Quick pick:</span>
               {qSuggestions.map(num => (
                 <button
                   key={num}
@@ -309,10 +306,10 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
                     handleConfirmQ(num);
                   }}
                   disabled={stage !== 'ask_q'}
-                  className={`px-3 py-1 rounded-full text-xs font-mono transition-all cursor-pointer ${
+                  className={`px-4 py-2 rounded-2xl text-xs sm:text-sm font-mono transition-all cursor-pointer ${
                     qVal === num && stage !== 'ask_q'
-                      ? 'bg-violet-500 text-white font-bold shadow-xs'
-                      : 'bg-stone-100 hover:bg-violet-100 text-stone-700 border border-stone-200/80 disabled:opacity-60'
+                      ? 'bg-violet-600 dark:bg-violet-500 text-white font-bold shadow-sm'
+                      : 'bg-white/80 dark:bg-stone-900/80 hover:bg-violet-50 dark:hover:bg-violet-950 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-800 disabled:opacity-60 shadow-xs'
                   }`}
                 >
                   q = {num}
@@ -322,18 +319,18 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
 
             {/* Custom Input */}
             {stage === 'ask_q' && (
-              <div className="pl-9 pt-1 flex items-center gap-2">
+              <div className="pl-13 pt-1 flex items-center gap-3">
                 <input
                   type="number"
                   value={qInput}
                   onChange={e => setQInput(e.target.value)}
                   placeholder="Enter prime (e.g. 53)"
-                  className="w-36 px-3 py-1.5 text-xs font-mono rounded-xl bg-white border border-stone-200 text-stone-800 focus:outline-none focus:ring-2 focus:ring-violet-300"
+                  className="w-44 px-4 py-2.5 text-sm sm:text-base font-mono rounded-2xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-400 shadow-xs"
                 />
                 <button
                   onClick={() => handleConfirmQ()}
                   disabled={!isPrime(parseInt(qInput, 10)) || parseInt(qInput, 10) === pVal}
-                  className="px-4 py-1.5 rounded-xl bg-stone-900 text-white text-xs font-medium hover:bg-stone-800 disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
+                  className="px-6 py-2.5 rounded-2xl bg-stone-900 hover:bg-stone-800 dark:bg-violet-500 dark:hover:bg-violet-400 text-white text-sm font-medium disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer shadow-xs"
                 >
                   Confirm q
                 </button>
@@ -342,9 +339,9 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
 
             {/* Confirmed pill */}
             {stage !== 'ask_q' && (
-              <div className="pl-9">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-violet-50 border border-violet-200 text-violet-800 text-xs font-mono">
-                  <Check className="w-3.5 h-3.5 text-violet-500" />
+              <div className="pl-13">
+                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-violet-50 dark:bg-violet-950/60 border border-violet-200 dark:border-violet-800/80 text-violet-800 dark:text-violet-200 text-xs sm:text-sm font-mono">
+                  <Check className="w-4 h-4 text-violet-500" />
                   <span>q = {qVal} selected</span>
                 </span>
               </div>
@@ -354,69 +351,69 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
 
         {/* STEP 3: KEY GENERATION ANIMATION / CARDS */}
         {(stage === 'keygen_anim' || stage === 'keys_ready' || stage === 'ask_message' || stage === 'encrypt_anim' || stage === 'ciphertext_view' || stage === 'decrypt_anim' || stage === 'recovered') && (
-          <div className="space-y-4 animate-fade-up pl-9">
+          <div className="space-y-5 animate-fade-up pl-13">
             {/* Animated Game-like Progress Box */}
-            <div className="p-4 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-3">
-              <div className="flex items-center justify-between text-xs font-mono">
-                <span className="font-semibold text-stone-700 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-violet-500" />
+            <div className="p-5 sm:p-7 rounded-3xl bg-white/90 dark:bg-stone-900/90 border border-stone-200/80 dark:border-stone-800/80 shadow-md backdrop-blur-md space-y-4">
+              <div className="flex items-center justify-between text-sm sm:text-base font-mono pb-2 border-b border-stone-100 dark:border-stone-800">
+                <span className="font-semibold text-stone-800 dark:text-stone-100 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-violet-500" />
                   <span>Forging RSA Mathematical Keys</span>
                 </span>
                 {stage === 'keygen_anim' ? (
-                  <span className="text-violet-600 animate-pulse">calculating...</span>
+                  <span className="text-violet-600 dark:text-violet-400 animate-pulse font-medium">calculating...</span>
                 ) : (
-                  <span className="text-emerald-600 flex items-center gap-1">
-                    <Check className="w-3 h-3" /> Ready
+                  <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 font-medium">
+                    <Check className="w-4 h-4" /> Ready
                   </span>
                 )}
               </div>
 
               {/* Step checklist */}
-              <div className="space-y-2 text-xs font-mono">
-                <div className={`flex items-center justify-between ${keyGenProgress >= 1 || stage !== 'keygen_anim' ? 'text-stone-800' : 'text-stone-300'}`}>
+              <div className="space-y-3 text-sm sm:text-base font-mono">
+                <div className={`flex items-center justify-between ${keyGenProgress >= 1 || stage !== 'keygen_anim' ? 'text-stone-800 dark:text-stone-200' : 'text-stone-300 dark:text-stone-700'}`}>
                   <span>1. Modulus n = p × q = {pVal} × {qVal}</span>
-                  <span className="font-bold text-violet-600">{keys ? keys.n.toString() : '...'}</span>
+                  <span className="font-bold text-violet-600 dark:text-violet-400">{keys ? keys.n.toString() : '...'}</span>
                 </div>
-                <div className={`flex items-center justify-between ${keyGenProgress >= 2 || stage !== 'keygen_anim' ? 'text-stone-800' : 'text-stone-300'}`}>
+                <div className={`flex items-center justify-between ${keyGenProgress >= 2 || stage !== 'keygen_anim' ? 'text-stone-800 dark:text-stone-200' : 'text-stone-300 dark:text-stone-700'}`}>
                   <span>2. Totient φ(n) = ({pVal}-1)({qVal}-1)</span>
-                  <span className="font-bold text-violet-600">{keys ? keys.phi.toString() : '...'}</span>
+                  <span className="font-bold text-violet-600 dark:text-violet-400">{keys ? keys.phi.toString() : '...'}</span>
                 </div>
-                <div className={`flex items-center justify-between ${keyGenProgress >= 3 || stage !== 'keygen_anim' ? 'text-stone-800' : 'text-stone-300'}`}>
+                <div className={`flex items-center justify-between ${keyGenProgress >= 3 || stage !== 'keygen_anim' ? 'text-stone-800 dark:text-stone-200' : 'text-stone-300 dark:text-stone-700'}`}>
                   <span>3. Public exponent e (coprime with φ)</span>
-                  <span className="font-bold text-violet-600">{keys ? keys.e.toString() : '...'}</span>
+                  <span className="font-bold text-violet-600 dark:text-violet-400">{keys ? keys.e.toString() : '...'}</span>
                 </div>
-                <div className={`flex items-center justify-between ${keyGenProgress >= 4 || stage !== 'keygen_anim' ? 'text-stone-800' : 'text-stone-300'}`}>
+                <div className={`flex items-center justify-between ${keyGenProgress >= 4 || stage !== 'keygen_anim' ? 'text-stone-800 dark:text-stone-200' : 'text-stone-300 dark:text-stone-700'}`}>
                   <span>4. Private exponent d ≡ e⁻¹ mod φ(n)</span>
-                  <span className="font-bold text-emerald-600">{keys ? keys.d.toString() : '...'}</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400">{keys ? keys.d.toString() : '...'}</span>
                 </div>
               </div>
 
               {/* Revealed Pastel Keys */}
               {(stage === 'keys_ready' || stage === 'ask_message' || stage === 'encrypt_anim' || stage === 'ciphertext_view' || stage === 'decrypt_anim' || stage === 'recovered') && keys && (
-                <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 animate-fade-in">
-                  <div className="p-3 rounded-xl bg-violet-50/70 border border-violet-200/80 space-y-1">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-violet-800 font-mono">
-                      <Lock className="w-3.5 h-3.5" />
+                <div className="pt-3 grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fade-in">
+                  <div className="p-4 sm:p-5 rounded-2xl bg-violet-50/80 dark:bg-violet-950/40 border border-violet-200 dark:border-violet-800/80 space-y-2">
+                    <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-violet-800 dark:text-violet-300 font-mono">
+                      <Lock className="w-4 h-4" />
                       <span>PUBLIC KEY (e, n)</span>
                     </div>
-                    <div className="text-base font-mono font-bold text-violet-900">
+                    <div className="text-2xl sm:text-3xl font-mono font-extrabold text-violet-900 dark:text-violet-100">
                       ({keys.e.toString()}, {keys.n.toString()})
                     </div>
-                    <p className="text-[10px] text-violet-700/80">
-                      Shared publicly. Anyone uses this to encrypt.
+                    <p className="text-xs text-violet-700/80 dark:text-violet-300/80 leading-relaxed">
+                      Shared publicly. Anyone uses this to encrypt for you.
                     </p>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/80 space-y-1">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800 font-mono">
-                      <Unlock className="w-3.5 h-3.5" />
+                  <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 space-y-2">
+                    <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-emerald-800 dark:text-emerald-300 font-mono">
+                      <Unlock className="w-4 h-4" />
                       <span>PRIVATE KEY (d, n)</span>
                     </div>
-                    <div className="text-base font-mono font-bold text-emerald-900">
+                    <div className="text-2xl sm:text-3xl font-mono font-extrabold text-emerald-900 dark:text-emerald-100">
                       ({keys.d.toString()}, {keys.n.toString()})
                     </div>
-                    <p className="text-[10px] text-emerald-700/80">
-                      Kept secret! Only this key can decrypt.
+                    <p className="text-xs text-emerald-700/80 dark:text-emerald-300/80 leading-relaxed">
+                      Kept strictly secret! Only this key can decrypt.
                     </p>
                   </div>
                 </div>
@@ -426,10 +423,10 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
             {stage === 'keys_ready' && (
               <button
                 onClick={() => setStage('ask_message')}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-stone-900 text-white text-xs font-medium hover:bg-stone-800 transition-all cursor-pointer"
+                className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-stone-900 hover:bg-stone-800 dark:bg-violet-500 dark:hover:bg-violet-400 text-white text-sm sm:text-base font-medium transition-all shadow-md cursor-pointer"
               >
                 <span>Write a secret message</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4" />
               </button>
             )}
           </div>
@@ -437,16 +434,16 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
 
         {/* STEP 4: PROMPT FOR MESSAGE */}
         {(stage === 'ask_message' || stage === 'encrypt_anim' || stage === 'ciphertext_view' || stage === 'decrypt_anim' || stage === 'recovered') && (
-          <div className="space-y-3 animate-fade-up">
-            <div className="flex items-start gap-2.5">
-              <div className="w-7 h-7 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-mono font-bold flex-shrink-0 mt-0.5">
+          <div className="space-y-4 animate-fade-up">
+            <div className="flex items-start gap-3.5">
+              <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300 flex items-center justify-center text-sm font-mono font-bold flex-shrink-0 mt-0.5 border border-amber-200/60 dark:border-amber-800/60 shadow-xs">
                 3
               </div>
               <div className="space-y-1">
-                <p className="text-sm sm:text-base font-medium text-stone-800">
+                <h2 className="text-xl sm:text-2xl font-semibold text-stone-900 dark:text-stone-100">
                   What message would you like to encrypt?
-                </p>
-                <p className="text-xs text-stone-400">
+                </h2>
+                <p className="text-sm sm:text-base text-stone-500 dark:text-stone-400">
                   Letters are mapped into numbers (A=1, B=2 ... Z=26).
                 </p>
               </div>
@@ -454,8 +451,8 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
 
             {/* Suggestions */}
             {stage === 'ask_message' && (
-              <div className="pl-9 flex flex-wrap items-center gap-1.5">
-                <span className="text-xs text-stone-400 mr-1">Sample:</span>
+              <div className="pl-13 flex flex-wrap items-center gap-2">
+                <span className="text-xs sm:text-sm text-stone-400 dark:text-stone-500 mr-1 font-mono">Sample:</span>
                 {msgSuggestions.map(word => (
                   <button
                     key={word}
@@ -463,7 +460,7 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
                       setMessageInput(word);
                       handleConfirmMessage(word);
                     }}
-                    className="px-3 py-1 rounded-full text-xs font-mono bg-stone-100 hover:bg-amber-100 text-stone-700 border border-stone-200/80 transition-colors cursor-pointer"
+                    className="px-4 py-2 rounded-2xl text-xs sm:text-sm font-mono bg-white/80 dark:bg-stone-900/80 hover:bg-amber-50 dark:hover:bg-amber-950 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-800 transition-all shadow-xs cursor-pointer"
                   >
                     "{word}"
                   </button>
@@ -473,19 +470,19 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
 
             {/* Custom Input */}
             {stage === 'ask_message' && (
-              <div className="pl-9 pt-1 flex items-center gap-2">
+              <div className="pl-13 pt-1 flex items-center gap-3">
                 <input
                   type="text"
-                  maxLength={12}
+                  maxLength={14}
                   value={messageInput}
                   onChange={e => setMessageInput(e.target.value.toUpperCase())}
                   placeholder="Enter word (e.g. HELLO)"
-                  className="w-48 px-3 py-1.5 text-xs font-mono uppercase font-bold rounded-xl bg-white border border-stone-200 text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                  className="w-56 px-4 py-3 text-base sm:text-lg font-mono uppercase font-bold rounded-2xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-xs"
                 />
                 <button
                   onClick={() => handleConfirmMessage()}
                   disabled={!messageInput.trim()}
-                  className="px-4 py-1.5 rounded-xl bg-stone-900 text-white text-xs font-medium hover:bg-stone-800 disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
+                  className="px-6 py-3 rounded-2xl bg-stone-900 hover:bg-stone-800 dark:bg-amber-500 dark:hover:bg-amber-400 text-white text-sm sm:text-base font-medium disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer shadow-xs"
                 >
                   Encrypt Message 🔐
                 </button>
@@ -494,15 +491,15 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
 
             {/* Confirmed message representation */}
             {stage !== 'ask_message' && (
-              <div className="pl-9 flex flex-wrap items-center gap-1.5">
-                <span className="text-xs font-mono text-stone-400">Message:</span>
+              <div className="pl-13 flex flex-wrap items-center gap-2">
+                <span className="text-sm font-mono text-stone-400 dark:text-stone-500">Message:</span>
                 {encodedChars.map((item, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs font-mono font-bold"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800/80 text-amber-900 dark:text-amber-200 text-sm font-mono font-bold"
                   >
                     <span>{item.char}</span>
-                    <span className="text-[10px] font-normal text-amber-600">({item.numericValue})</span>
+                    <span className="text-xs font-normal text-amber-600 dark:text-amber-400">({item.numericValue})</span>
                   </span>
                 ))}
               </div>
@@ -512,28 +509,28 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
 
         {/* STEP 5: ENCRYPT ANIMATION */}
         {(stage === 'encrypt_anim' || stage === 'ciphertext_view' || stage === 'decrypt_anim' || stage === 'recovered') && (
-          <div className="space-y-3 animate-fade-up pl-9">
-            <div className="p-4 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-3">
-              <div className="flex items-center justify-between text-xs font-mono">
-                <span className="font-semibold text-stone-700 flex items-center gap-1.5">
-                  <Lock className="w-3.5 h-3.5 text-amber-500" />
-                  <span>Interactive Encryption Process: c = mᵉ mod n</span>
+          <div className="space-y-4 animate-fade-up pl-13">
+            <div className="p-5 sm:p-7 rounded-3xl bg-white/90 dark:bg-stone-900/90 border border-stone-200/80 dark:border-stone-800/80 shadow-md backdrop-blur-md space-y-4">
+              <div className="flex items-center justify-between text-sm sm:text-base font-mono pb-2 border-b border-stone-100 dark:border-stone-800">
+                <span className="font-semibold text-stone-800 dark:text-stone-100 flex items-center gap-2">
+                  <Lock className="w-4 h-4 text-amber-500" />
+                  <span>Interactive Encryption: c = mᵉ mod n</span>
                 </span>
-                <span className="text-stone-400">
+                <span className="text-stone-400 dark:text-stone-500 text-xs sm:text-sm">
                   {Math.min(animCharIndex, encodedChars.length)} / {encodedChars.length} chars
                 </span>
               </div>
 
               {/* Progress bar */}
-              <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden">
+              <div className="w-full h-2 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-amber-400 transition-all duration-300"
+                  className="h-full bg-amber-400 dark:bg-amber-500 transition-all duration-300"
                   style={{ width: `${(Math.min(animCharIndex, encodedChars.length) / encodedChars.length) * 100}%` }}
                 />
               </div>
 
               {/* Active token visualization */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 pt-1">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 pt-2">
                 {encodedChars.map((item, idx) => {
                   const isDone = stage !== 'encrypt_anim' || idx < animCharIndex;
                   const isCurrent = stage === 'encrypt_anim' && idx === animCharIndex;
@@ -542,21 +539,21 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
                   return (
                     <div
                       key={idx}
-                      className={`p-2.5 rounded-xl border text-center transition-all ${
+                      className={`p-3.5 rounded-2xl border text-center transition-all ${
                         isCurrent
-                          ? 'border-amber-400 bg-amber-50/80 scale-105 shadow-xs'
+                          ? 'border-amber-400 bg-amber-50/90 dark:bg-amber-950/60 scale-105 shadow-md'
                           : isDone
-                          ? 'border-stone-200 bg-stone-50/60'
-                          : 'border-dashed border-stone-200 opacity-40'
+                          ? 'border-stone-200 dark:border-stone-800 bg-stone-50/80 dark:bg-stone-800/50'
+                          : 'border-dashed border-stone-200 dark:border-stone-800 opacity-40'
                       }`}
                     >
-                      <div className="text-sm font-mono font-bold text-stone-800">
+                      <div className="text-lg font-mono font-bold text-stone-900 dark:text-stone-100">
                         {item.char}
                       </div>
-                      <div className="text-[10px] font-mono text-stone-400">
+                      <div className="text-xs font-mono text-stone-400 dark:text-stone-500">
                         m = {item.numericValue}
                       </div>
-                      <div className="text-xs font-mono font-bold text-amber-700 mt-1">
+                      <div className="text-sm font-mono font-bold text-amber-700 dark:text-amber-400 mt-1.5">
                         {isDone ? `c = ${cipherVal?.toString()}` : isCurrent ? 'calc...' : '—'}
                       </div>
                     </div>
@@ -566,21 +563,21 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
             </div>
 
             {stage === 'ciphertext_view' && (
-              <div className="pt-1 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-2xl bg-purple-50 border border-purple-200 text-purple-900 animate-fade-in">
+              <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-3xl bg-purple-50/90 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800/80 text-purple-900 dark:text-purple-200 animate-fade-in shadow-md">
                 <div>
-                  <div className="text-xs font-mono font-bold text-purple-800">
-                    Transmitted Ciphertext:
+                  <div className="text-xs sm:text-sm font-mono font-bold text-purple-800 dark:text-purple-300">
+                    Transmitted Ciphertext Payload:
                   </div>
-                  <div className="font-mono text-sm font-bold text-purple-950 mt-0.5">
+                  <div className="font-mono text-base sm:text-lg font-bold text-purple-950 dark:text-purple-100 mt-1">
                     [ {cipherNumbers.map(c => c.toString()).join(', ')} ]
                   </div>
                 </div>
 
                 <button
                   onClick={handleStartDecryption}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-purple-600 hover:bg-purple-700 text-white text-xs font-medium shadow-xs transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-400 text-white text-sm font-medium shadow-md transition-all cursor-pointer"
                 >
-                  <Unlock className="w-3.5 h-3.5" />
+                  <Unlock className="w-4 h-4" />
                   <span>Decrypt with Secret Key (d)</span>
                 </button>
               </div>
@@ -590,28 +587,28 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
 
         {/* STEP 6: DECRYPT ANIMATION */}
         {(stage === 'decrypt_anim' || stage === 'recovered') && (
-          <div className="space-y-3 animate-fade-up pl-9">
-            <div className="p-4 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-3">
-              <div className="flex items-center justify-between text-xs font-mono">
-                <span className="font-semibold text-stone-700 flex items-center gap-1.5">
-                  <Unlock className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>Interactive Decryption Process: m = cᵈ mod n</span>
+          <div className="space-y-4 animate-fade-up pl-13">
+            <div className="p-5 sm:p-7 rounded-3xl bg-white/90 dark:bg-stone-900/90 border border-stone-200/80 dark:border-stone-800/80 shadow-md backdrop-blur-md space-y-4">
+              <div className="flex items-center justify-between text-sm sm:text-base font-mono pb-2 border-b border-stone-100 dark:border-stone-800">
+                <span className="font-semibold text-stone-800 dark:text-stone-100 flex items-center gap-2">
+                  <Unlock className="w-4 h-4 text-emerald-500" />
+                  <span>Interactive Decryption: m = cᵈ mod n</span>
                 </span>
-                <span className="text-stone-400">
+                <span className="text-stone-400 dark:text-stone-500 text-xs sm:text-sm">
                   {Math.min(animCharIndex, cipherNumbers.length)} / {cipherNumbers.length} decoded
                 </span>
               </div>
 
               {/* Progress bar */}
-              <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden">
+              <div className="w-full h-2 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-emerald-400 transition-all duration-300"
+                  className="h-full bg-emerald-400 dark:bg-emerald-500 transition-all duration-300"
                   style={{ width: `${(Math.min(animCharIndex, cipherNumbers.length) / cipherNumbers.length) * 100}%` }}
                 />
               </div>
 
               {/* Decrypted tiles */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 pt-1">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 pt-2">
                 {cipherNumbers.map((cVal, idx) => {
                   const isDone = stage === 'recovered' || idx < animCharIndex;
                   const isCurrent = stage === 'decrypt_anim' && idx === animCharIndex;
@@ -620,21 +617,21 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
                   return (
                     <div
                       key={idx}
-                      className={`p-2.5 rounded-xl border text-center transition-all ${
+                      className={`p-3.5 rounded-2xl border text-center transition-all ${
                         isCurrent
-                          ? 'border-emerald-400 bg-emerald-50/80 scale-105 shadow-xs'
+                          ? 'border-emerald-400 bg-emerald-50/90 dark:bg-emerald-950/60 scale-105 shadow-md'
                           : isDone
-                          ? 'border-emerald-200 bg-emerald-50/40 text-emerald-900'
-                          : 'border-dashed border-stone-200 opacity-40'
+                          ? 'border-emerald-200 dark:border-emerald-800/80 bg-emerald-50/40 dark:bg-emerald-950/30 text-emerald-900 dark:text-emerald-200'
+                          : 'border-dashed border-stone-200 dark:border-stone-800 opacity-40'
                       }`}
                     >
-                      <div className="text-[10px] font-mono text-stone-400">
+                      <div className="text-xs font-mono text-stone-400 dark:text-stone-500">
                         c = {cVal.toString()}
                       </div>
-                      <div className="text-sm font-mono font-bold text-stone-800 my-0.5">
+                      <div className="text-xl font-mono font-bold text-stone-900 dark:text-stone-100 my-1">
                         {isDone && charRecovered ? charRecovered : isCurrent ? '...' : '—'}
                       </div>
-                      <div className="text-[10px] font-mono text-emerald-600 font-semibold">
+                      <div className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
                         {isDone ? '✓ recovered' : '—'}
                       </div>
                     </div>
@@ -647,28 +644,28 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
 
         {/* STEP 7: VICTORY & RECOVERED SCREEN */}
         {stage === 'recovered' && (
-          <div className="space-y-4 animate-fade-up pl-9">
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 text-center space-y-3">
-              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 text-xl mx-auto">
+          <div className="space-y-6 animate-fade-up pl-13">
+            <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/20 border border-emerald-200 dark:border-emerald-800/80 text-center space-y-4 shadow-lg">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-2xl mx-auto shadow-xs">
                 🎉
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-stone-900">
+              <h3 className="text-xl sm:text-3xl font-extrabold text-stone-900 dark:text-stone-50">
                 Message Successfully Recovered!
               </h3>
-              <p className="text-xs text-stone-500 max-w-sm mx-auto">
-                The private key unlocked the trapdoor mathematical permutation. The decoded numbers match the original input perfectly.
+              <p className="text-sm sm:text-base text-stone-600 dark:text-stone-300 max-w-md mx-auto leading-relaxed">
+                The private key reversed the mathematical trapdoor. The decoded values match the original plaintext with 100% precision.
               </p>
 
               {/* Side-by-side comparison */}
-              <div className="flex items-center justify-center gap-4 pt-1 font-mono text-sm">
-                <div className="px-3 py-1.5 rounded-lg bg-white border border-stone-200">
-                  <span className="text-[10px] text-stone-400 block">ORIGINAL</span>
-                  <span className="font-bold text-stone-800">{messageInput}</span>
+              <div className="flex items-center justify-center gap-6 pt-2 font-mono text-base sm:text-xl">
+                <div className="px-5 py-2.5 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-xs">
+                  <span className="text-xs text-stone-400 block mb-0.5">ORIGINAL</span>
+                  <span className="font-bold text-stone-800 dark:text-stone-100">{messageInput}</span>
                 </div>
-                <span className="text-emerald-500 font-bold">≡</span>
-                <div className="px-3 py-1.5 rounded-lg bg-white border border-emerald-200">
-                  <span className="text-[10px] text-emerald-600 block">DECRYPTED</span>
-                  <span className="font-bold text-emerald-700">{messageInput}</span>
+                <span className="text-emerald-500 font-bold text-2xl">≡</span>
+                <div className="px-5 py-2.5 rounded-2xl bg-white dark:bg-stone-900 border border-emerald-300 dark:border-emerald-700 shadow-xs">
+                  <span className="text-xs text-emerald-600 dark:text-emerald-400 block mb-0.5">DECRYPTED</span>
+                  <span className="font-bold text-emerald-700 dark:text-emerald-300">{messageInput}</span>
                 </div>
               </div>
 
@@ -676,30 +673,32 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
               <div className="pt-2">
                 <button
                   onClick={() => setShowMathDetail(!showMathDetail)}
-                  className="inline-flex items-center gap-1 text-xs text-stone-500 hover:text-stone-800 font-mono transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 font-mono transition-colors cursor-pointer"
                 >
-                  <span>{showMathDetail ? 'Hide' : 'Inspect'} Step-by-Step Math</span>
-                  <ChevronDown className={`w-3.5 h-3.5 transform transition-transform ${showMathDetail ? 'rotate-180' : ''}`} />
+                  <span>{showMathDetail ? 'Hide' : 'Inspect'} Step-by-Step Character Math</span>
+                  <ChevronDown className={`w-4 h-4 transform transition-transform ${showMathDetail ? 'rotate-180' : ''}`} />
                 </button>
               </div>
             </div>
 
             {/* Collapsible Math Detail Drawer */}
             {showMathDetail && keys && (
-              <div className="p-4 rounded-2xl bg-white border border-stone-200 text-xs font-mono space-y-3 animate-fade-in">
-                <div className="font-bold text-stone-700">Detailed Character Mathematics:</div>
-                <div className="divide-y divide-stone-100 space-y-2">
+              <div className="p-5 sm:p-6 rounded-3xl bg-white/95 dark:bg-stone-900/95 border border-stone-200 dark:border-stone-800 text-xs sm:text-sm font-mono space-y-3 animate-fade-in shadow-md">
+                <div className="font-bold text-stone-800 dark:text-stone-200 pb-2 border-b border-stone-100 dark:border-stone-800">
+                  Detailed Character Transformation Ledger:
+                </div>
+                <div className="divide-y divide-stone-100 dark:divide-stone-800 space-y-2">
                   {encodedChars.map((item, idx) => {
                     const c = cipherNumbers[idx];
                     return (
-                      <div key={idx} className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-stone-600">
+                      <div key={idx} className="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-stone-700 dark:text-stone-300">
                         <div>
-                          <span className="font-bold text-stone-900">'{item.char}'</span> (m={item.numericValue})
+                          <span className="font-bold text-stone-900 dark:text-stone-100 text-base">'{item.char}'</span> (m={item.numericValue})
                         </div>
-                        <div className="text-violet-600">
+                        <div className="text-violet-700 dark:text-violet-400">
                           Encrypt: {item.numericValue}<sup>{keys.e.toString()}</sup> mod {keys.n.toString()} = <strong>{c?.toString()}</strong>
                         </div>
-                        <div className="text-emerald-600">
+                        <div className="text-emerald-700 dark:text-emerald-400">
                           Decrypt: {c?.toString()}<sup>{keys.d.toString()}</sup> mod {keys.n.toString()} = <strong>{item.numericValue} ('{item.char}')</strong>
                         </div>
                       </div>
@@ -710,16 +709,16 @@ export const PromptFlow: React.FC<Props> = ({ onBackToHome }) => {
             )}
 
             {/* Action buttons */}
-            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
               <button
                 onClick={handleRestartNewMessage}
-                className="px-5 py-2.5 rounded-full bg-stone-900 text-white text-xs font-medium hover:bg-stone-800 transition-colors cursor-pointer"
+                className="px-6 py-3.5 rounded-full bg-stone-900 hover:bg-stone-800 dark:bg-violet-500 dark:hover:bg-violet-400 text-white text-sm sm:text-base font-medium transition-all shadow-md cursor-pointer"
               >
                 Encrypt Another Message
               </button>
               <button
                 onClick={handleRestartNewPrimes}
-                className="px-5 py-2.5 rounded-full bg-white border border-stone-200 text-stone-700 text-xs font-medium hover:bg-stone-100 transition-colors cursor-pointer"
+                className="px-6 py-3.5 rounded-full bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 text-sm sm:text-base font-medium transition-all shadow-xs cursor-pointer"
               >
                 Choose New Primes
               </button>

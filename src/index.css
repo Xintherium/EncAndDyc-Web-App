@@ -13,7 +13,7 @@
   }
 
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(8px); }
+    from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
@@ -23,8 +23,18 @@
   }
 
   @keyframes slideIn {
-    from { opacity: 0; transform: translateX(-10px); }
+    from { opacity: 0; transform: translateX(-12px); }
     to   { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes floatSlow {
+    0%, 100% { transform: translate(0px, 0px) scale(1); }
+    50% { transform: translate(18px, -24px) scale(1.06); }
+  }
+
+  @keyframes floatSlower {
+    0%, 100% { transform: translate(0px, 0px) scale(1); }
+    50% { transform: translate(-22px, 18px) scale(0.96); }
   }
 }
 
@@ -33,12 +43,18 @@
     animation: blink 1s step-end infinite;
   }
   .animate-fade-up {
-    animation: fadeUp 0.35s ease-out both;
+    animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
   .animate-fade-in {
-    animation: fadeIn 0.4s ease-out both;
+    animation: fadeIn 0.45s ease-out both;
   }
   .animate-slide-in {
-    animation: slideIn 0.3s ease-out both;
+    animation: slideIn 0.35s ease-out both;
+  }
+  .animate-float-slow {
+    animation: floatSlow 14s ease-in-out infinite;
+  }
+  .animate-float-slower {
+    animation: floatSlower 18s ease-in-out infinite;
   }
 }

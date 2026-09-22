@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 interface Props {
   onStart: () => void;
@@ -6,61 +7,57 @@ interface Props {
 
 export const HeroScreen: React.FC<Props> = ({ onStart }) => {
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-800 flex flex-col items-center justify-center p-6 select-none">
-      {/* Decorative Pastel Bubbles */}
-      <div className="absolute -top-16 -left-16 w-64 h-64 bg-violet-100 rounded-full blur-3xl opacity-60 pointer-events-none" />
-      <div className="absolute -bottom-16 -right-16 w-72 h-72 bg-emerald-100 rounded-full blur-3xl opacity-60 pointer-events-none" />
-      <div className="absolute top-1/3 right-10 w-48 h-48 bg-amber-100 rounded-full blur-3xl opacity-50 pointer-events-none" />
-
-      <div className="relative max-w-md w-full text-center space-y-8 animate-fade-in z-10">
-        {/* Minimal Pastel Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-100/80 border border-violet-200/60 text-violet-700 text-xs font-mono font-medium">
-          <span className="w-2 h-2 rounded-full bg-violet-400 animate-pulse" />
-          <span>interactive mathematics laboratory</span>
+    <div className="relative min-h-screen flex flex-col items-center justify-center p-6 sm:p-10 select-none transition-colors duration-500 z-10">
+      <div className="max-w-2xl w-full text-center space-y-10 sm:space-y-12 animate-fade-in">
+        {/* Pastel Pill Badge */}
+        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-violet-100/80 dark:bg-violet-950/60 border border-violet-200/80 dark:border-violet-800/60 text-violet-700 dark:text-violet-300 text-xs sm:text-sm font-mono font-medium shadow-xs">
+          <Sparkles className="w-4 h-4 text-violet-500 animate-pulse" />
+          <span>Interactive Mathematics Laboratory</span>
         </div>
 
-        {/* Minimal Hero Title */}
-        <div className="space-y-3">
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-stone-900 font-sans">
-            RSA <span className="text-violet-500 font-serif italic font-normal">Alive</span>
+        {/* Large Prominent Hero Title */}
+        <div className="space-y-5">
+          <h1 className="text-6xl sm:text-8xl font-extrabold tracking-tight text-stone-900 dark:text-stone-50 font-sans leading-none">
+            RSA <span className="text-violet-500 dark:text-violet-400 font-serif italic font-normal">Alive</span>
           </h1>
-          <p className="text-stone-500 text-sm sm:text-base leading-relaxed max-w-xs mx-auto">
-            An interactive, living journey through public-key encryption. No complex dashboards — just step-by-step discovery.
+          <p className="text-stone-600 dark:text-stone-300 text-lg sm:text-2xl leading-relaxed max-w-xl mx-auto font-light">
+            A living, prompt-driven journey through public-key cryptography. Watch mathematics become a digital lock.
           </p>
         </div>
 
-        {/* Interactive mini preview pills */}
-        <div className="flex items-center justify-center gap-2 text-xs font-mono py-2">
-          <span className="px-3 py-1 rounded-lg bg-stone-100 text-stone-600 border border-stone-200">
-            p & q
+        {/* Big Pipeline Preview Badges */}
+        <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 text-sm sm:text-base font-mono py-2">
+          <span className="px-4 py-2 rounded-xl bg-white/80 dark:bg-stone-900/80 text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800 shadow-xs">
+            primes p, q
           </span>
-          <span className="text-stone-300">→</span>
-          <span className="px-3 py-1 rounded-lg bg-violet-100 text-violet-700 border border-violet-200">
-            keys
+          <span className="text-stone-300 dark:text-stone-600 font-bold">→</span>
+          <span className="px-4 py-2 rounded-xl bg-violet-50 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 border border-violet-200/80 dark:border-violet-800 shadow-xs">
+            keys (e, d, n)
           </span>
-          <span className="text-stone-300">→</span>
-          <span className="px-3 py-1 rounded-lg bg-amber-100 text-amber-700 border border-amber-200">
-            encrypt
+          <span className="text-stone-300 dark:text-stone-600 font-bold">→</span>
+          <span className="px-4 py-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800 shadow-xs">
+            encrypt mᵉ
           </span>
-          <span className="text-stone-300">→</span>
-          <span className="px-3 py-1 rounded-lg bg-emerald-100 text-emerald-700 border border-emerald-200">
-            decrypt
+          <span className="text-stone-300 dark:text-stone-600 font-bold">→</span>
+          <span className="px-4 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800 shadow-xs">
+            decrypt cᵈ
           </span>
         </div>
 
-        {/* Big Start Button */}
+        {/* Large Prominent Start Button */}
         <div className="pt-2">
           <button
             onClick={onStart}
-            className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-stone-900 hover:bg-stone-800 text-white font-medium text-sm tracking-wide transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 shadow-md shadow-stone-900/10 cursor-pointer"
+            className="group inline-flex items-center justify-center gap-3 px-10 sm:px-12 py-4 sm:py-5 rounded-full bg-stone-900 hover:bg-stone-800 dark:bg-violet-500 dark:hover:bg-violet-400 text-white font-medium text-base sm:text-lg tracking-wide transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 shadow-lg shadow-stone-900/15 dark:shadow-violet-500/20 cursor-pointer"
           >
-            Start Exploring →
+            <span>Start Exploration</span>
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
 
-        {/* Educational safety notice */}
-        <p className="text-[11px] text-stone-400 font-mono tracking-tight pt-4">
-          uses small educational primes for transparency · pure in-browser math
+        {/* Subtle Educational Disclaimer */}
+        <p className="text-xs sm:text-sm text-stone-400 dark:text-stone-500 font-mono tracking-tight pt-4">
+          demonstration with small primes · 100% in-browser exact BigInt mathematics
         </p>
       </div>
     </div>
